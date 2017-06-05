@@ -1,9 +1,9 @@
 /*go**************************************************************************
  File            : list_test.go
- Subsystem       : com17173
+ Subsystem       : dadianjing
  Author          : yijunjun
- Date&Time       : 2017-06-02
- Description     : 17173-列表页-测试
+ Date&Time       : 2017-06-05
+ Description     : dadianjing-列表页-测试
  Revision        :
 
  History
@@ -13,7 +13,7 @@
  Copyright (c) Shenzhen Team Blemobi.
 **************************************************************************go*/
 
-package com17173
+package dadianjing
 
 import (
 	"testing"
@@ -38,22 +38,13 @@ func run(t *testing.T, handler func(string) (*List, error), url string) {
 }
 
 func TestLOLList(t *testing.T) {
-	run(t, LOLList, "http://lol.17173.com/list/zdbg/")
-	run(t, LOLList, "http://lol.17173.com/list/zixun.shtml")
+	run(t, LOLList, "http://www.dadianjing.cn/index.php?m=Index&a=xhrList&cid=5&page=1")
 }
 
 func TestOWList(t *testing.T) {
-	run(t, OWList, "http://ow.17173.com/news/")
-}
-
-func TestMEList(t *testing.T) {
-	run(t, MEList, "http://news.17173.com/z/pvp/list/zxwz.shtml")
+	run(t, OWList, "http://www.dadianjing.cn/index.php?m=Index&a=xhrList&cid=6&page=1")
 }
 
 func TestCSGOList(t *testing.T) {
-	run(t, CSGOList, "http://csgo.17173.com/z/")
-}
-
-func TestDOTA2List(t *testing.T) {
-	run(t, DOTA2List, "http://dota2.17173.com/news/")
+	run(t, CSGOList, "http://www.dadianjing.cn/index.php?m=Index&a=xhrList&cid=26&page=1")
 }

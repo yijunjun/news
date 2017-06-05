@@ -189,19 +189,3 @@ func next_pages(list *List, doc *goquery.Document) {
 		list.Urls[i] = s.AttrOr("href", "")
 	})
 }
-
-func NewList(list_url string) (*List, error) {
-	var game_list = map[string]func(string) (*List, error){
-		"http://lol.":   LOLList,
-		"http://ow.":    OWList,
-		"http://csgo.":  CSGOList,
-		"http://me.":    MEList,
-		"http://dota2.": DOTA2List,
-	}
-	for prefix, handler := range game_list {
-		if strings.HasPrefix(list_url, prefix) {
-			return handler(list_url)
-		}
-	}
-	return nil, errors.New("can not support " + list_url)
-}

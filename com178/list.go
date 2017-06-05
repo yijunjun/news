@@ -90,11 +90,14 @@ func OWList(list_url string) (*List, error) {
 		}
 
 		// 发布时间
-		list.Infos[i].Date = strings.SplitN(
+		date2list := strings.SplitN(
 			s.Find("dd .ds2 span").Eq(1).Text(),
 			"：",
 			2,
-		)[1]
+		)
+		if len(date2list) == 2 {
+			list.Infos[i].Date = date2list[1]
+		}
 	})
 
 	next_pages(list, doc)

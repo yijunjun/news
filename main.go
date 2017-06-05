@@ -2,16 +2,17 @@ package main
 
 import (
 	"fmt"
-	"net/url"
-	"path"
+
+	_ "github.com/yijunjun/news/com15w"
+	_ "github.com/yijunjun/news/com17173"
+	_ "github.com/yijunjun/news/com178"
+	_ "github.com/yijunjun/news/dadianjing"
+	_ "github.com/yijunjun/news/duowan"
+	_ "github.com/yijunjun/news/ooqiu"
+	_ "github.com/yijunjun/news/pcgames"
+	_ "github.com/yijunjun/news/tgbus"
 )
 
 func main() {
-	u, err := url.Parse("http://lol.duowan.com/tag/307577396279.html")
-	if err != nil {
-		fmt.Println(err.Error())
-		return
-	}
-
-	fmt.Println(u.Scheme+"//"+u.Host, u.Path, path.Dir(u.Path))
+	fmt.Println("hello,world!")
 }

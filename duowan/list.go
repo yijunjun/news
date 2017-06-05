@@ -85,17 +85,15 @@ func OWList(list_url string) (*List, error) {
 		return nil, err
 	}
 
-	art_list := doc.Find(".ch-list-sec")
+	art_list := doc.Find(".ch-list-sec a")
 
 	list := &List{
 		Infos: make([]PageInfo, art_list.Length()),
 	}
 
 	art_list.Each(func(i int, s *goquery.Selection) {
-		a_node := s.ChildrenFiltered("a")
-
 		// 详细页网址
-		if href, has := a_node.Attr("href"); has {
+		if href, has := s.Attr("href"); has {
 			list.Infos[i].Url = prefix + href
 		}
 
@@ -103,7 +101,7 @@ func OWList(list_url string) (*List, error) {
 		list.Infos[i].Title = s.Find(".titles").Text()
 
 		// 封面
-		img_node := s.Find("ch-img img")
+		img_node := s.Find(".ch-img img")
 		if src, has := img_node.Attr("src"); has {
 			list.Infos[i].ImgSrc = src
 		}
@@ -133,27 +131,25 @@ func MEList(list_url string) (*List, error) {
 		return nil, err
 	}
 
-	art_list := doc.Find(".list-section-contents")
+	art_list := doc.Find(".news-list-page li a")
 
 	list := &List{
 		Infos: make([]PageInfo, art_list.Length()),
 	}
 
 	art_list.Each(func(i int, s *goquery.Selection) {
-		a_node := s.Find("h2 a")
-
 		// 详细页网址
-		if href, has := a_node.Attr("href"); has {
+		if href, has := s.Attr("href"); has {
 			list.Infos[i].Url = href
 		}
 
 		// 标题
-		if title, has := a_node.Attr("title"); has {
+		if title, has := s.Attr("title"); has {
 			list.Infos[i].Title = title
 		}
 
 		// 发布时间
-		list.Infos[i].Date = s.ChildrenFiltered("h5").Text()
+		list.Infos[i].Date = s.ChildrenFiltered(".news-time").Text()
 	})
 
 	next_pages(list, doc, base)
@@ -177,31 +173,30 @@ func DOTA2List(list_url string) (*List, error) {
 		return nil, err
 	}
 
-	art_list := doc.Find(".articlelist li")
+	art_list := doc.Find("#list li")
 
 	list := &List{
 		Infos: make([]PageInfo, art_list.Length()),
 	}
 
 	art_list.Each(func(i int, s *goquery.Selection) {
-		a_node := s.Find(".info a")
+		a_node := s.ChildrenFiltered("a")
 
 		// 详细页网址
 		if href, has := a_node.Attr("href"); has {
+			if !strings.HasPrefix(href, "http") {
+				href = prefix + href
+			}
 			list.Infos[i].Url = href
 		}
 
 		// 标题
-		list.Infos[i].Title = a_node.Text()
-
-		// 封面
-		img_node := s.Find(".pic img")
-		if src, has := img_node.Attr("src"); has {
-			list.Infos[i].ImgSrc = src
+		if title, has := a_node.Attr("title"); has {
+			list.Infos[i].Title = title
 		}
 
 		// 发布时间
-		list.Infos[i].Date = s.Find(".time").Text()
+		list.Infos[i].Date = s.ChildrenFiltered(".date").Text()
 	})
 
 	next_pages(list, doc, base)
@@ -225,32 +220,29 @@ func CSGOList(list_url string) (*List, error) {
 		return nil, err
 	}
 
-	art_list := doc.Find(".conts li")
+	art_list := doc.Find(".list-artical li a")
 
 	list := &List{
 		Infos: make([]PageInfo, art_list.Length()),
 	}
 
 	art_list.Each(func(i int, s *goquery.Selection) {
-		a_node := s.ChildrenFiltered("a")
-
 		// 详细页网址
-		if href, has := a_node.Attr("href"); has {
-			list.Infos[i].Url = href
+		if href, has := s.Attr("href"); has {
+			list.Infos[i].Url = prefix + href
 		}
+
 		// 标题
-		if title, has := a_node.Attr("title"); has {
-			list.Infos[i].Title = title
-		}
+		list.Infos[i].Title = s.Find(".item-cont h2").Text()
 
 		// 封面
-		a_img_node := a_node.ChildrenFiltered("img")
-		if src, has := a_img_node.Attr("src"); has {
+		img_node := s.Find(".item-cover img")
+		if src, has := img_node.Attr("src"); has {
 			list.Infos[i].ImgSrc = src
 		}
 
 		// 发布时间
-		list.Infos[i].Date = s.Find(".sp4").Text()
+		list.Infos[i].Date = s.Find(".item-time").Text()
 	})
 
 	next_pages(list, doc, base)
@@ -273,11 +265,11 @@ func next_pages(list *List, doc *goquery.Document, base string) {
 
 func NewList(list_url string) (*List, error) {
 	var game_list = map[string]func(string) (*List, error){
-		"http://lol.":     LOLList,
-		"http://ow.":      OWList,
-		"http://csgo.":    CSGOList,
-		"http://shouyou.": MEList,
-		"http://dota2.":   DOTA2List,
+		"http://lol.":   LOLList,
+		"http://ow.":    OWList,
+		"http://csgo.":  CSGOList,
+		"http://wzry.":  MEList,
+		"http://dota2.": DOTA2List,
 	}
 	for prefix, handler := range game_list {
 		if strings.HasPrefix(list_url, prefix) {

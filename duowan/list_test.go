@@ -37,26 +37,22 @@ func run(t *testing.T, handler func(string) (*List, error), url string) {
 	}
 }
 
-/*
 func TestLOLList(t *testing.T) {
 	run(t, LOLList, "http://lol.duowan.com/tag/307577396279.html")
 }
-*/
 
 func TestOWList(t *testing.T) {
 	run(t, OWList, "http://ow.duowan.com/tag/309977280409.html")
 }
 
-/*
 func TestMEList(t *testing.T) {
-	run(t, MEList, "http://shouyou.178.com/list/230864526697_7.html")
+	run(t, MEList, "http://wzry.duowan.com/tag/327319645493.html")
 }
 
 func TestDOTA2List(t *testing.T) {
-	run(t, DOTA2List, "http://dota2.178.com/list/news_10.html")
+	run(t, DOTA2List, "http://dota2.duowan.com/1302/m_225195792481.html")
 }
 
 func TestCSGOList(t *testing.T) {
-	run(t, CSGOList, "http://csgo.178.com/list/252011760339.html")
+	run(t, CSGOList, "http://csgo.duowan.com/tag/319717425248.html")
 }
-*/
