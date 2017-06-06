@@ -25,7 +25,7 @@ import (
 	. "github.com/yijunjun/news/model"
 )
 
-func LOLList(list_url string) (*List, error) {
+func LOLList(list_url string) (*TList, error) {
 	// 因为服务器返回gb2312编码,但goquery默认采用utf8,所以采用mahonia转换
 	resp, err := http.Get(list_url)
 	if err != nil {
@@ -43,8 +43,8 @@ func LOLList(list_url string) (*List, error) {
 
 	art_list := doc.Find("#topnewsContent .media-body")
 
-	list := &List{
-		Infos: make([]PageInfo, art_list.Length()),
+	list := &TList{
+		Infos: make([]TPageInfo, art_list.Length()),
 	}
 
 	art_list.Each(func(i int, s *goquery.Selection) {
@@ -67,15 +67,15 @@ func LOLList(list_url string) (*List, error) {
 	return list, nil
 }
 
-func DOTA2List(list_url string) (*List, error) {
+func DOTA2List(list_url string) (*TList, error) {
 	return LOLList(list_url)
 }
 
-func CSGOList(list_url string) (*List, error) {
+func CSGOList(list_url string) (*TList, error) {
 	return DOTA2List(list_url)
 }
 
-func next_pages(list *List, doc *goquery.Document) {
+func next_pages(list *TList, doc *goquery.Document) {
 	url_list := doc.Find("#page a[href]")
 
 	list.Urls = make([]string, url_list.Length())
@@ -85,8 +85,8 @@ func next_pages(list *List, doc *goquery.Document) {
 	})
 }
 
-func NewList(list_url string) (*List, error) {
-	var game_list = map[string]func(string) (*List, error){
+func NewList(list_url string) (*TList, error) {
+	var game_list = map[string]func(string) (*TList, error){
 		"http://wangyou.":                    LOLList,
 		"http://fight.pcgames.com.cn/dota2/": DOTA2List,
 		"http://fight.pcgames.com.cn/cs":     CSGOList,

@@ -24,7 +24,7 @@ func TestLOLPage(t *testing.T) {
 		return
 	}
 
-	t.Log(page.Id, page.Anthor, page.Source, page.Date, page.HitsCount, page.CommentCount)
+	t.Log(page.Id, page.Author, page.Source, page.Date, page.HitsCount, page.CommentCount)
 }
 
 func TestOWPage(t *testing.T) {
@@ -34,28 +34,17 @@ func TestOWPage(t *testing.T) {
 		return
 	}
 
-	t.Log(page.Id, page.Anthor, page.Source, page.Date, page.HitsCount, page.CommentCount)
-}
-
-func TestCSGOPage(t *testing.T) {
-	page, err := CSGOPage("http://csgo.15w.com/yxzx/5606954825.html")
-	if err != nil {
-		t.Error(err.Error())
-		return
-	}
-
-	t.Log(page.Id, page.Anthor, page.Source, page.Date, page.HitsCount, page.CommentCount)
+	t.Log(page.Id, page.Author, page.Source, page.Date, page.HitsCount, page.CommentCount)
 }
 
 func TestMEPage(t *testing.T) {
-
 	page, err := MEPage("http://me.15w.com/dj/5605406665.html")
 	if err != nil {
 		t.Error(err.Error())
 		return
 	}
 
-	t.Log(page.Id, page.Anthor, page.Source, page.Date, page.HitsCount, page.CommentCount)
+	t.Log(page.Id, page.Author, page.Source, page.Date, page.HitsCount, page.CommentCount)
 }
 
 func TestDOTA2Page(t *testing.T) {
@@ -66,5 +55,15 @@ func TestDOTA2Page(t *testing.T) {
 		return
 	}
 
-	t.Log(page.Id, page.Anthor, page.Source, page.Date, page.HitsCount, page.CommentCount)
+	t.Log(page.Id, page.Author, page.Source, page.Date, page.HitsCount, page.CommentCount)
+}
+
+func TestCSGOPage(t *testing.T) {
+	page, err := CSGOPage("http://csgo.15w.com/yxzx/5606954825.html")
+	if err != nil {
+		t.Error(err.Error())
+		return
+	}
+
+	t.Log(page.Id, page.Author, page.Source, page.Date, page.HitsCount, page.CommentCount)
 }

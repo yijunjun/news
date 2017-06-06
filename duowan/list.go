@@ -25,7 +25,7 @@ import (
 	. "github.com/yijunjun/news/model"
 )
 
-func LOLList(list_url string) (*List, error) {
+func LOLList(list_url string) (*TList, error) {
 	u, err := url.Parse(list_url)
 	if err != nil {
 		return nil, err
@@ -43,8 +43,8 @@ func LOLList(list_url string) (*List, error) {
 
 	art_list := doc.Find(".ZQ-page--news .m-list li")
 
-	list := &List{
-		Infos: make([]PageInfo, art_list.Length()),
+	list := &TList{
+		Infos: make([]TPageInfo, art_list.Length()),
 	}
 
 	art_list.Each(func(i int, s *goquery.Selection) {
@@ -69,7 +69,7 @@ func LOLList(list_url string) (*List, error) {
 	return list, nil
 }
 
-func OWList(list_url string) (*List, error) {
+func OWList(list_url string) (*TList, error) {
 	u, err := url.Parse(list_url)
 	if err != nil {
 		return nil, err
@@ -87,8 +87,8 @@ func OWList(list_url string) (*List, error) {
 
 	art_list := doc.Find(".ch-list-sec a")
 
-	list := &List{
-		Infos: make([]PageInfo, art_list.Length()),
+	list := &TList{
+		Infos: make([]TPageInfo, art_list.Length()),
 	}
 
 	art_list.Each(func(i int, s *goquery.Selection) {
@@ -115,7 +115,7 @@ func OWList(list_url string) (*List, error) {
 	return list, nil
 }
 
-func MEList(list_url string) (*List, error) {
+func MEList(list_url string) (*TList, error) {
 	u, err := url.Parse(list_url)
 	if err != nil {
 		return nil, err
@@ -133,8 +133,8 @@ func MEList(list_url string) (*List, error) {
 
 	art_list := doc.Find(".news-list-page li a")
 
-	list := &List{
-		Infos: make([]PageInfo, art_list.Length()),
+	list := &TList{
+		Infos: make([]TPageInfo, art_list.Length()),
 	}
 
 	art_list.Each(func(i int, s *goquery.Selection) {
@@ -157,7 +157,7 @@ func MEList(list_url string) (*List, error) {
 	return list, nil
 }
 
-func DOTA2List(list_url string) (*List, error) {
+func DOTA2List(list_url string) (*TList, error) {
 	u, err := url.Parse(list_url)
 	if err != nil {
 		return nil, err
@@ -175,8 +175,8 @@ func DOTA2List(list_url string) (*List, error) {
 
 	art_list := doc.Find("#list li")
 
-	list := &List{
-		Infos: make([]PageInfo, art_list.Length()),
+	list := &TList{
+		Infos: make([]TPageInfo, art_list.Length()),
 	}
 
 	art_list.Each(func(i int, s *goquery.Selection) {
@@ -204,7 +204,7 @@ func DOTA2List(list_url string) (*List, error) {
 	return list, nil
 }
 
-func CSGOList(list_url string) (*List, error) {
+func CSGOList(list_url string) (*TList, error) {
 	u, err := url.Parse(list_url)
 	if err != nil {
 		return nil, err
@@ -222,8 +222,8 @@ func CSGOList(list_url string) (*List, error) {
 
 	art_list := doc.Find(".list-artical li a")
 
-	list := &List{
-		Infos: make([]PageInfo, art_list.Length()),
+	list := &TList{
+		Infos: make([]TPageInfo, art_list.Length()),
 	}
 
 	art_list.Each(func(i int, s *goquery.Selection) {
@@ -250,7 +250,7 @@ func CSGOList(list_url string) (*List, error) {
 	return list, nil
 }
 
-func next_pages(list *List, doc *goquery.Document, base string) {
+func next_pages(list *TList, doc *goquery.Document, base string) {
 	url_list := doc.Find("#pageNum span a")
 
 	list.Urls = make([]string, url_list.Length())
@@ -263,8 +263,8 @@ func next_pages(list *List, doc *goquery.Document, base string) {
 	})
 }
 
-func NewList(list_url string) (*List, error) {
-	var game_list = map[string]func(string) (*List, error){
+func NewList(list_url string) (*TList, error) {
+	var game_list = map[string]func(string) (*TList, error){
 		"http://lol.":   LOLList,
 		"http://ow.":    OWList,
 		"http://csgo.":  CSGOList,

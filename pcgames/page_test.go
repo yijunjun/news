@@ -24,7 +24,7 @@ func TestLOLPage(t *testing.T) {
 		return
 	}
 
-	t.Log(page.Id, page.Anthor, page.Source, page.Date, page.HitsCount, page.CommentCount)
+	t.Log(page.Id, page.Author, page.Source, page.Date, page.HitsCount, page.CommentCount)
 }
 
 func TestOWPage(t *testing.T) {
@@ -34,7 +34,7 @@ func TestOWPage(t *testing.T) {
 		return
 	}
 
-	t.Log(page.Id, page.Anthor, page.Source, page.Date, page.HitsCount, page.CommentCount)
+	t.Log(page.Id, page.Author, page.Source, page.Date, page.HitsCount, page.CommentCount)
 }
 
 func TestCSGOPage(t *testing.T) {
@@ -44,7 +44,7 @@ func TestCSGOPage(t *testing.T) {
 		return
 	}
 
-	t.Log(page.Id, page.Anthor, page.Source, page.Date, page.HitsCount, page.CommentCount)
+	t.Log(page.Id, page.Author, page.Source, page.Date, page.HitsCount, page.CommentCount)
 }
 
 func TestMEPage(t *testing.T) {
@@ -55,7 +55,7 @@ func TestMEPage(t *testing.T) {
 		return
 	}
 
-	t.Log(page.Id, page.Anthor, page.Source, page.Date, page.HitsCount, page.CommentCount)
+	t.Log(page.Id, page.Author, page.Source, page.Date, page.HitsCount, page.CommentCount)
 }
 
 func TestDOTA2Page(t *testing.T) {
@@ -66,5 +66,5 @@ func TestDOTA2Page(t *testing.T) {
 		return
 	}
 
-	t.Log(page.Id, page.Anthor, page.Source, page.Date, page.HitsCount, page.CommentCount)
+	t.Log(page.Id, page.Author, page.Source, page.Date, page.HitsCount, page.CommentCount)
 }

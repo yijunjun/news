@@ -16,7 +16,6 @@
 package com17173
 
 import (
-	"errors"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
@@ -27,7 +26,7 @@ import (
 	"github.com/axgle/mahonia"
 )
 
-func LOLList(list_url string) (*List, error) {
+func LOLList(list_url string) (*TList, error) {
 	// 列表页
 	doc, err := goquery.NewDocument(list_url)
 	if err != nil {
@@ -36,8 +35,8 @@ func LOLList(list_url string) (*List, error) {
 
 	art_list := doc.Find(".comm-list .art-item")
 
-	list := &List{
-		Infos: make([]PageInfo, art_list.Length()),
+	list := &TList{
+		Infos: make([]TPageInfo, art_list.Length()),
 	}
 
 	art_list.Each(func(i int, s *goquery.Selection) {
@@ -60,7 +59,7 @@ func LOLList(list_url string) (*List, error) {
 	return list, nil
 }
 
-func OWList(list_url string) (*List, error) {
+func OWList(list_url string) (*TList, error) {
 	// 列表页
 	doc, err := goquery.NewDocument(list_url)
 	if err != nil {
@@ -69,8 +68,8 @@ func OWList(list_url string) (*List, error) {
 
 	art_list := doc.Find(".list-article .list-item")
 
-	list := &List{
-		Infos: make([]PageInfo, art_list.Length()),
+	list := &TList{
+		Infos: make([]TPageInfo, art_list.Length()),
 	}
 
 	art_list.Each(func(i int, s *goquery.Selection) {
@@ -99,7 +98,7 @@ func OWList(list_url string) (*List, error) {
 	return list, nil
 }
 
-func MEList(list_url string) (*List, error) {
+func MEList(list_url string) (*TList, error) {
 	// 列表页
 	doc, err := goquery.NewDocument(list_url)
 	if err != nil {
@@ -108,8 +107,8 @@ func MEList(list_url string) (*List, error) {
 
 	art_list := doc.Find(".list-news .art-item")
 
-	list := &List{
-		Infos: make([]PageInfo, art_list.Length()),
+	list := &TList{
+		Infos: make([]TPageInfo, art_list.Length()),
 	}
 
 	art_list.Each(func(i int, s *goquery.Selection) {
@@ -143,7 +142,7 @@ func MEList(list_url string) (*List, error) {
 	return list, nil
 }
 
-func DOTA2List(list_url string) (*List, error) {
+func DOTA2List(list_url string) (*TList, error) {
 	// 因为服务器返回gb2312编码,但goquery默认采用utf8,所以采用mahonia转换
 	resp, err := http.Get(list_url)
 	if err != nil {
@@ -161,8 +160,8 @@ func DOTA2List(list_url string) (*List, error) {
 
 	art_list := doc.Find(".art-list-txt .art-item")
 
-	list := &List{
-		Infos: make([]PageInfo, art_list.Length()),
+	list := &TList{
+		Infos: make([]TPageInfo, art_list.Length()),
 	}
 
 	art_list.Each(func(i int, s *goquery.Selection) {
@@ -185,7 +184,7 @@ func DOTA2List(list_url string) (*List, error) {
 	return list, nil
 }
 
-func CSGOList(list_url string) (*List, error) {
+func CSGOList(list_url string) (*TList, error) {
 	// 列表页
 	doc, err := goquery.NewDocument(list_url)
 	if err != nil {
@@ -194,8 +193,8 @@ func CSGOList(list_url string) (*List, error) {
 
 	art_list := doc.Find(".list-news .art-item")
 
-	list := &List{
-		Infos: make([]PageInfo, art_list.Length()),
+	list := &TList{
+		Infos: make([]TPageInfo, art_list.Length()),
 	}
 
 	art_list.Each(func(i int, s *goquery.Selection) {
@@ -229,7 +228,7 @@ func CSGOList(list_url string) (*List, error) {
 	return list, nil
 }
 
-func next_pages(list *List, doc *goquery.Document) {
+func next_pages(list *TList, doc *goquery.Document) {
 	url_list := doc.Find(".pagination li a")
 
 	list.Urls = make([]string, url_list.Length())
@@ -237,20 +236,4 @@ func next_pages(list *List, doc *goquery.Document) {
 	url_list.Each(func(i int, s *goquery.Selection) {
 		list.Urls[i] = s.AttrOr("href", "")
 	})
-}
-
-func NewList(list_url string) (*List, error) {
-	var game_list = map[string]func(string) (*List, error){
-		"http://lol.":   LOLList,
-		"http://ow.":    OWList,
-		"http://csgo.":  CSGOList,
-		"http://news.":  MEList,
-		"http://dota2.": DOTA2List,
-	}
-	for prefix, handler := range game_list {
-		if strings.HasPrefix(list_url, prefix) {
-			return handler(list_url)
-		}
-	}
-	return nil, errors.New("can not support " + list_url)
 }

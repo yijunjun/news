@@ -15,10 +15,6 @@
 
 package common
 
-import (
-	"errors"
-)
-
 type SelfErr struct {
 	s string
 }

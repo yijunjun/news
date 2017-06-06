@@ -1,9 +1,9 @@
 /*go**************************************************************************
  File            : init.go
- Subsystem       : com15w
+ Subsystem       : com178
  Author          : yijunjun
- Date&Time       : 2017-06-02
- Description     : 电竞头条-初始化
+ Date&Time       : 2017-06-06
+ Description     : 178-初始化
  Revision        :
 
  History
@@ -13,55 +13,58 @@
  Copyright (c) Shenzhen Team Blemobi.
 **************************************************************************go*/
 
-package com15w
+package com178
 
 import (
 	"net/url"
+	"regexp"
 	"strings"
 
 	"github.com/yijunjun/news/common"
 	. "github.com/yijunjun/news/model"
 )
 
+var g_digit_reg = regexp.MustCompile(`\d+`)
+
 type TSiteNode struct {
 	ListPrefix string
 	ListFun    func(string) (*TList, error)
 
-	PagePrefix string
+	PagePrefix *regexp.Regexp
 	PageFun    func(string) (*TPage, error)
 }
 
 func init() {
-	common.RegSiteHandle("15w.com", func(raw_url string, u *url.URL) error {
+	common.RegSiteHandle("178.com", func(raw_url string, u *url.URL) error {
 		for game, sn := range map[string]TSiteNode{
 			"lol": TSiteNode{
-				ListPrefix: "/zx/",
+				ListPrefix: "/list/",
 				ListFun:    LOLList,
-				PagePrefix: "/ss/",
+				PagePrefix: g_digit_reg,
 				PageFun:    LOLPage,
 			},
 			"ow": TSiteNode{
-				ListPrefix: "/xw/",
+				ListPrefix: "/list/",
 				ListFun:    OWList,
-				PagePrefix: "/ss/",
+				PagePrefix: g_digit_reg,
 				PageFun:    OWPage,
 			},
-			"me": TSiteNode{
-				ListPrefix: "/wzry/",
+			"shouyou": TSiteNode{
+				ListPrefix: "/list/",
 				ListFun:    MEList,
-				PagePrefix: "/dj/",
+				PagePrefix: g_digit_reg,
 				PageFun:    MEPage,
 			},
 			"dota2": TSiteNode{
-				ListPrefix: "/news/",
+				ListPrefix: "/list/",
 				ListFun:    DOTA2List,
-				PagePrefix: "/guofuxinwen/",
+				PagePrefix: g_digit_reg,
 				PageFun:    DOTA2Page,
 			},
 			"csgo": TSiteNode{
-				ListPrefix: "/news/",
+				ListPrefix: "/list/",
 				ListFun:    CSGOList,
-				PagePrefix: "/yxzx/",
+				PagePrefix: g_digit_reg,
 				PageFun:    CSGOPage,
 			},
 		} {
@@ -70,7 +73,8 @@ func init() {
 					return SaveList(sn.ListFun(raw_url))
 				}
 
-				if strings.HasPrefix(u.Path, sn.PagePrefix) {
+				plist := strings.Split(u.Path, "/")
+				if len(plist) > 0 && sn.PagePrefix.MatchString(plist[0]) {
 					return SavePage(sn.PageFun(raw_url))
 				}
 			}

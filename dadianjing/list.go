@@ -44,7 +44,7 @@ type ArtJson struct {
 	}
 }
 
-func game_list(list_url string) (*List, error) {
+func game_list(list_url string) (*TList, error) {
 	u, err := url.Parse(list_url)
 	if err != nil {
 		return nil, err
@@ -62,8 +62,8 @@ func game_list(list_url string) (*List, error) {
 		return nil, err
 	}
 
-	list := &List{
-		Infos: make([]PageInfo, len(aj.Data.List)),
+	list := &TList{
+		Infos: make([]TPageInfo, len(aj.Data.List)),
 	}
 
 	for i, art := range aj.Data.List {
@@ -93,19 +93,19 @@ func game_list(list_url string) (*List, error) {
 	return list, nil
 }
 
-func LOLList(list_url string) (*List, error) {
+func LOLList(list_url string) (*TList, error) {
 	return game_list(list_url)
 }
 
-func OWList(list_url string) (*List, error) {
+func OWList(list_url string) (*TList, error) {
 	return game_list(list_url)
 }
 
-func CSGOList(list_url string) (*List, error) {
+func CSGOList(list_url string) (*TList, error) {
 	return game_list(list_url)
 }
 
-func NewList(list_url string) (*List, error) {
+func NewList(list_url string) (*TList, error) {
 	u, err := url.Parse(list_url)
 	if err != nil {
 		return nil, err

@@ -19,57 +19,17 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"html"
 	"io/ioutil"
 	"net/http"
 	"regexp"
 	"strings"
 	"time"
 
-	. "github.com/yijunjun/news/model"
-
 	"github.com/PuerkitoBio/goquery"
+	"github.com/yijunjun/news/common"
+	. "github.com/yijunjun/news/model"
 )
-
-func LOLPage(page_url string) (*Page, error) {
-	doc, err := goquery.NewDocument(page_url)
-	if err != nil {
-		return nil, err
-	}
-
-	info_ele := doc.Find(".headline-box .info span")
-	if info_ele == nil {
-		return nil, errors.New("span find failure")
-	}
-
-	page := &Page{
-		Anthor: info_ele.Eq(1).Text(),
-		Source: info_ele.Eq(5).Text(),
-		Date:   info_ele.Eq(6).Text(),
-	}
-
-	// 获取文章id
-	aid, has := doc.Find("#hitscount").Attr("aid")
-	if !has {
-		return nil, errors.New("aid find failure")
-	}
-
-	page.Id = aid
-
-	page.HitsCount, err = hits_count(page.Id)
-	if err != nil {
-		return nil, err
-	}
-
-	page.CommentCount, err = comment_count(page.Id)
-	if err != nil {
-		return nil, err
-	}
-	return page, nil
-}
-
-func OWPage(page_url string) (*Page, error) {
-	return LOLPage(page_url)
-}
 
 // 构造请求获取阅读次数
 func hits_count(id string) (string, error) {
@@ -137,107 +97,149 @@ func comment_count(id string) (string, error) {
 	return string(m[1]), nil
 }
 
-func CSGOPage(page_url string) (*Page, error) {
+func LOLPage(page_url string) (*TPage, error) {
 	doc, err := goquery.NewDocument(page_url)
 	if err != nil {
 		return nil, err
 	}
 
-	info_ele := doc.Find(".mainHead p span")
+	info := html.UnescapeString(doc.Find(".article_lf_con_author").Text())
+
+	author_flag := "作者："
+	source_flag := "来源："
+	date_flag := "发布时间："
+
+	anchor_flag_pos := strings.Index(info, author_flag)
+	if anchor_flag_pos == -1 {
+		return nil, common.NewSelfError("can not find author:" + info)
+	}
+
+	source_flag_pos := strings.Index(info, source_flag)
+	if source_flag_pos == -1 {
+		return nil, common.NewSelfError("can not find source:" + info)
+	}
+
+	date_flag_pos := strings.Index(info, date_flag)
+	if date_flag_pos == -1 {
+		return nil, common.NewSelfError("can not find date:" + info)
+	}
+
+	return &TPage{
+		Author: info[anchor_flag_pos+len(author_flag) : source_flag_pos],
+		Source: info[source_flag_pos+len(source_flag) : date_flag_pos],
+		Date:   info[date_flag_pos+len(date_flag):],
+	}, nil
+}
+
+func OWPage(page_url string) (*TPage, error) {
+	doc, err := goquery.NewDocument(page_url)
+	if err != nil {
+		return nil, err
+	}
+
+	info_ele := doc.Find(".arc-text h2 span")
 	if info_ele == nil {
-		return nil, errors.New("span find failure")
+		return nil, common.NewSelfError("span find failure:" + page_url)
 	}
 
-	page := &Page{
-		Source: info_ele.Eq(3).Text(),
-		Date:   info_ele.Eq(4).Text(),
+	author2list := strings.SplitN(
+		info_ele.Eq(0).Text(),
+		"：",
+		2,
+	)
+	if len(author2list) != 2 {
+		return nil, common.NewSelfError("author splitN failure:" + info_ele.Eq(0).Text())
 	}
 
-	// 获取文章id
-	aid, has := doc.Find("#hitscount").Attr("aid")
-	if !has {
-		return nil, errors.New("aid find failure")
+	source2list := strings.SplitN(
+		info_ele.Eq(1).Text(),
+		"：",
+		2,
+	)
+	if len(source2list) != 2 {
+		return nil, common.NewSelfError("source splitN failure:" + info_ele.Eq(1).Text())
 	}
 
-	page.Id = aid
-
-	page.HitsCount, err = hits_count(page.Id)
-	if err != nil {
-		return nil, err
+	date2list := strings.SplitN(
+		info_ele.Eq(2).Text(),
+		"：",
+		2,
+	)
+	if len(date2list) != 2 {
+		return nil, common.NewSelfError("date splitN failure:" + info_ele.Eq(2).Text())
 	}
 
-	page.CommentCount, err = comment_count(page.Id)
-	if err != nil {
-		return nil, err
-	}
-	return page, nil
+	return &TPage{
+		Author: author2list[1],
+		Source: source2list[1],
+		Date:   date2list[1],
+	}, nil
 }
 
-func MEPage(page_url string) (*Page, error) {
+func MEPage(page_url string) (*TPage, error) {
 	doc, err := goquery.NewDocument(page_url)
 	if err != nil {
 		return nil, err
 	}
 
-	info_ele := doc.Find(".pv-title .ti-info span")
+	info_ele := doc.Find(".author-item")
 	if info_ele == nil {
-		return nil, errors.New("span find failure")
+		return nil, common.NewSelfError("author-item find failure:" + page_url)
 	}
 
-	page := &Page{
-		Source: strings.TrimSpace(
-			// "："是中文输入法输入的
-			strings.SplitN(info_ele.Eq(2).Text(), "：", 2)[1],
-		),
-		Date: strings.TrimSpace(
-			strings.SplitN(info_ele.Eq(0).Text(), "：", 2)[1],
-		),
-	}
-
-	// 获取文章id
-	sid, has := doc.Find("#changyan_count_unit").Attr("sid")
-	if !has {
-		return nil, errors.New("sid find failure")
-	}
-
-	page.Id = strings.SplitN(sid, "/", 2)[1]
-
-	page.CommentCount, err = comment_count(page.Id)
-	if err != nil {
-		return nil, err
-	}
-	return page, nil
+	return &TPage{
+		Author: info_ele.Find("span[author]").AttrOr("author", ""),
+		Date:   info_ele.ChildrenFiltered(".time").Text(),
+	}, nil
 }
 
-func DOTA2Page(page_url string) (*Page, error) {
+func DOTA2Page(page_url string) (*TPage, error) {
 	doc, err := goquery.NewDocument(page_url)
 	if err != nil {
 		return nil, err
 	}
 
-	info := doc.Find(".c_bor2 .t").Text()
+	info := doc.Find("div[class=info]")
 
-	page := &Page{
-		Date: strings.TrimSpace(
-			strings.SplitN(info, "发布时间：", 2)[1],
-		),
+	page := &TPage{
+		Author: info.ChildrenFiltered(".author").Text(),
+		Date:   info.ChildrenFiltered(".time").Text(),
 	}
 
 	return page, nil
 }
 
-func NewPage(page_url string) (*Page, error) {
-	var game_page = map[string]func(string) (*Page, error){
-		"http://lol.":   LOLPage,
-		"http://ow.":    OWPage,
-		"http://csgo.":  CSGOPage,
-		"http://me.":    MEPage,
-		"http://dota2.": DOTA2Page,
+func CSGOPage(page_url string) (*TPage, error) {
+	doc, err := goquery.NewDocument(page_url)
+	if err != nil {
+		return nil, err
 	}
-	for prefix, handler := range game_page {
-		if strings.HasPrefix(page_url, prefix) {
-			return handler(page_url)
-		}
+
+	info_ele := doc.Find(".author span")
+	if info_ele == nil {
+		return nil, common.NewSelfError("author find failure:" + page_url)
 	}
-	return nil, errors.New("can not support " + page_url)
+
+	source2list := strings.SplitN(
+		info_ele.Eq(0).Text(),
+		"：",
+		2,
+	)
+	if len(source2list) != 2 {
+		return nil, common.NewSelfError("source splitN failure:" + info_ele.Eq(0).Text())
+	}
+
+	date2list := strings.SplitN(
+		info_ele.Eq(2).Text(),
+		"：",
+		2,
+	)
+	if len(date2list) != 2 {
+		return nil, common.NewSelfError("date splitN failure:" + info_ele.Eq(2).Text())
+	}
+
+	return &TPage{
+		Source: source2list[1],
+		Date:   date2list[1],
+	}, nil
 }

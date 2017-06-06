@@ -16,14 +16,11 @@
 package com15w
 
 import (
-	"errors"
-	"strings"
-
 	"github.com/PuerkitoBio/goquery"
 	. "github.com/yijunjun/news/model"
 )
 
-func LOLList(list_url string) (*List, error) {
+func LOLList(list_url string) (*TList, error) {
 	// 列表页
 	doc, err := goquery.NewDocument(list_url)
 	if err != nil {
@@ -32,8 +29,8 @@ func LOLList(list_url string) (*List, error) {
 
 	art_list := doc.Find(".indexcon .artlist")
 
-	list := &List{
-		Infos: make([]PageInfo, art_list.Length()),
+	list := &TList{
+		Infos: make([]TPageInfo, art_list.Length()),
 	}
 
 	art_list.Each(func(i int, s *goquery.Selection) {
@@ -63,11 +60,11 @@ func LOLList(list_url string) (*List, error) {
 	return list, nil
 }
 
-func OWList(list_url string) (*List, error) {
+func OWList(list_url string) (*TList, error) {
 	return LOLList(list_url)
 }
 
-func MEList(list_url string) (*List, error) {
+func MEList(list_url string) (*TList, error) {
 	// 列表页
 	doc, err := goquery.NewDocument(list_url)
 	if err != nil {
@@ -76,8 +73,8 @@ func MEList(list_url string) (*List, error) {
 
 	art_list := doc.Find(".hot-newslist .hot-mp")
 
-	list := &List{
-		Infos: make([]PageInfo, art_list.Length()),
+	list := &TList{
+		Infos: make([]TPageInfo, art_list.Length()),
 	}
 
 	art_list.Each(func(i int, s *goquery.Selection) {
@@ -107,7 +104,7 @@ func MEList(list_url string) (*List, error) {
 	return list, nil
 }
 
-func DOTA2List(list_url string) (*List, error) {
+func DOTA2List(list_url string) (*TList, error) {
 	// 列表页
 	doc, err := goquery.NewDocument(list_url)
 	if err != nil {
@@ -116,8 +113,8 @@ func DOTA2List(list_url string) (*List, error) {
 
 	art_list := doc.Find(".col1 li")
 
-	list := &List{
-		Infos: make([]PageInfo, art_list.Length()),
+	list := &TList{
+		Infos: make([]TPageInfo, art_list.Length()),
 	}
 
 	art_list.Each(func(i int, s *goquery.Selection) {
@@ -140,7 +137,7 @@ func DOTA2List(list_url string) (*List, error) {
 	return list, nil
 }
 
-func CSGOList(list_url string) (*List, error) {
+func CSGOList(list_url string) (*TList, error) {
 	// 列表页
 	doc, err := goquery.NewDocument(list_url)
 	if err != nil {
@@ -149,8 +146,8 @@ func CSGOList(list_url string) (*List, error) {
 
 	art_list := doc.Find(".mainTabCon .artlist")
 
-	list := &List{
-		Infos: make([]PageInfo, art_list.Length()),
+	list := &TList{
+		Infos: make([]TPageInfo, art_list.Length()),
 	}
 
 	art_list.Each(func(i int, s *goquery.Selection) {
@@ -180,7 +177,7 @@ func CSGOList(list_url string) (*List, error) {
 	return list, nil
 }
 
-func next_pages(list *List, doc *goquery.Document) {
+func next_pages(list *TList, doc *goquery.Document) {
 	url_list := doc.Find(".pages a")
 
 	list.Urls = make([]string, url_list.Length())

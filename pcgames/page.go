@@ -30,7 +30,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-func LOLPage(page_url string) (*Page, error) {
+func LOLPage(page_url string) (*TPage, error) {
 	doc, err := goquery.NewDocument(page_url)
 	if err != nil {
 		return nil, err
@@ -41,8 +41,8 @@ func LOLPage(page_url string) (*Page, error) {
 		return nil, errors.New("span find failure")
 	}
 
-	page := &Page{
-		Anthor: info_ele.Eq(1).Text(),
+	page := &TPage{
+		Author: info_ele.Eq(1).Text(),
 		Source: info_ele.Eq(5).Text(),
 		Date:   info_ele.Eq(6).Text(),
 	}
@@ -67,7 +67,7 @@ func LOLPage(page_url string) (*Page, error) {
 	return page, nil
 }
 
-func OWPage(page_url string) (*Page, error) {
+func OWPage(page_url string) (*TPage, error) {
 	return LOLPage(page_url)
 }
 
@@ -137,7 +137,7 @@ func comment_count(id string) (string, error) {
 	return string(m[1]), nil
 }
 
-func CSGOPage(page_url string) (*Page, error) {
+func CSGOPage(page_url string) (*TPage, error) {
 	doc, err := goquery.NewDocument(page_url)
 	if err != nil {
 		return nil, err
@@ -148,7 +148,7 @@ func CSGOPage(page_url string) (*Page, error) {
 		return nil, errors.New("span find failure")
 	}
 
-	page := &Page{
+	page := &TPage{
 		Source: info_ele.Eq(3).Text(),
 		Date:   info_ele.Eq(4).Text(),
 	}
@@ -173,7 +173,7 @@ func CSGOPage(page_url string) (*Page, error) {
 	return page, nil
 }
 
-func MEPage(page_url string) (*Page, error) {
+func MEPage(page_url string) (*TPage, error) {
 	doc, err := goquery.NewDocument(page_url)
 	if err != nil {
 		return nil, err
@@ -184,7 +184,7 @@ func MEPage(page_url string) (*Page, error) {
 		return nil, errors.New("span find failure")
 	}
 
-	page := &Page{
+	page := &TPage{
 		Source: strings.TrimSpace(
 			// "："是中文输入法输入的
 			strings.SplitN(info_ele.Eq(2).Text(), "：", 2)[1],
@@ -209,7 +209,7 @@ func MEPage(page_url string) (*Page, error) {
 	return page, nil
 }
 
-func DOTA2Page(page_url string) (*Page, error) {
+func DOTA2Page(page_url string) (*TPage, error) {
 	doc, err := goquery.NewDocument(page_url)
 	if err != nil {
 		return nil, err
@@ -217,7 +217,7 @@ func DOTA2Page(page_url string) (*Page, error) {
 
 	info := doc.Find(".c_bor2 .t").Text()
 
-	page := &Page{
+	page := &TPage{
 		Date: strings.TrimSpace(
 			strings.SplitN(info, "发布时间：", 2)[1],
 		),
@@ -226,8 +226,8 @@ func DOTA2Page(page_url string) (*Page, error) {
 	return page, nil
 }
 
-func NewPage(page_url string) (*Page, error) {
-	var game_page = map[string]func(string) (*Page, error){
+func NewPage(page_url string) (*TPage, error) {
+	var game_page = map[string]func(string) (*TPage, error){
 		"http://lol.":   LOLPage,
 		"http://ow.":    OWPage,
 		"http://csgo.":  CSGOPage,

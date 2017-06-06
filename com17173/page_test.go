@@ -17,26 +17,50 @@ package com17173
 
 import "testing"
 
+/*
 func TestLOLPage(t *testing.T) {
-	page, err := LOLPage("http://lol.15w.com/ss/5606964485.html")
+	page, err := LOLPage("http://lol.17173.com/news/02212017/160148806.shtml")
 	if err != nil {
 		t.Error(err.Error())
 		return
 	}
 
-	t.Log(page.Id, page.Anthor, page.Source, page.Date, page.HitsCount, page.CommentCount)
+	t.Log(page.Id, page.Author, page.Source, page.Date, page.HitsCount, page.CommentCount)
 }
 
 func TestOWPage(t *testing.T) {
-	page, err := LOLPage("http://ow.15w.com/ss/5606966705.html")
+	// page, err := OWPage("http://bbs.17173.com/thread-10307183-1-1.html")
+	page, err := OWPage("http://bbs.17173.com/thread-10310586-1-1.html")
 	if err != nil {
 		t.Error(err.Error())
 		return
 	}
 
-	t.Log(page.Id, page.Anthor, page.Source, page.Date, page.HitsCount, page.CommentCount)
+	t.Log(page.Id, page.Author, page.Source, page.Date, page.HitsCount, page.CommentCount)
 }
 
+func TestMEPage(t *testing.T) {
+	page, err := MEPage("http://news.17173.com/z/pvp/content/06062017/105422411.shtml")
+	if err != nil {
+		t.Error(err.Error())
+		return
+	}
+
+	t.Log(page.Id, page.Author, page.Source, page.Date, page.HitsCount, page.CommentCount)
+}
+*/
+
+func TestDOTA2Page(t *testing.T) {
+	page, err := DOTA2Page("http://dota2.17173.com/news/04292017/150138726.shtml")
+	if err != nil {
+		t.Error(err.Error())
+		return
+	}
+
+	t.Log(page.Id, page.Author, page.Source, page.Date, page.HitsCount, page.CommentCount)
+}
+
+/*
 func TestCSGOPage(t *testing.T) {
 	page, err := CSGOPage("http://csgo.15w.com/yxzx/5606954825.html")
 	if err != nil {
@@ -44,27 +68,6 @@ func TestCSGOPage(t *testing.T) {
 		return
 	}
 
-	t.Log(page.Id, page.Anthor, page.Source, page.Date, page.HitsCount, page.CommentCount)
+	t.Log(page.Id, page.Author, page.Source, page.Date, page.HitsCount, page.CommentCount)
 }
-
-func TestMEPage(t *testing.T) {
-
-	page, err := MEPage("http://me.15w.com/dj/5605406665.html")
-	if err != nil {
-		t.Error(err.Error())
-		return
-	}
-
-	t.Log(page.Id, page.Anthor, page.Source, page.Date, page.HitsCount, page.CommentCount)
-}
-
-func TestDOTA2Page(t *testing.T) {
-
-	page, err := DOTA2Page("http://dota2.15w.com/guofuxinwen/5606947805.html")
-	if err != nil {
-		t.Error(err.Error())
-		return
-	}
-
-	t.Log(page.Id, page.Anthor, page.Source, page.Date, page.HitsCount, page.CommentCount)
-}
+*/

@@ -15,9 +15,9 @@
 
 package model
 
-type Page struct {
+type TPage struct {
 	Id           string
-	Anthor       string
+	Author       string
 	Source       string
 	Date         string
 	HitsCount    string

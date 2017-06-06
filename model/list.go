@@ -15,14 +15,14 @@
 
 package model
 
-type PageInfo struct {
+type TPageInfo struct {
 	ImgSrc string
 	Url    string
 	Title  string
 	Date   string
 }
 
-type List struct {
-	Infos []PageInfo
+type TList struct {
+	Infos []TPageInfo
 	Urls  []string
 }

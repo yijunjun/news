@@ -21,7 +21,7 @@ import (
 	. "github.com/yijunjun/news/model"
 )
 
-func run(t *testing.T, handler func(string) (*List, error), url string) {
+func run(t *testing.T, handler func(string) (*TList, error), url string) {
 	list, err := handler(url)
 	if err != nil {
 		t.Error(err.Error())

@@ -15,10 +15,17 @@
 
 package model
 
-func SaveList(_ *list, err error) error {
+import (
+	"strings"
+)
+
+func SaveList(_ *TList, err error) error {
 	return err
 }
 
-func SavePage(_ *Page, err error) error {
+func SavePage(tp *TPage, err error) error {
+	tp.Author = strings.TrimSpace(tp.Author)
+	tp.Source = strings.TrimSpace(tp.Source)
+	tp.Date = strings.TrimSpace(tp.Date)
 	return err
 }

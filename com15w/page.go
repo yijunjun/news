@@ -17,7 +17,6 @@ package com15w
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -31,7 +30,7 @@ import (
 	. "github.com/yijunjun/news/model"
 )
 
-func LOLPage(page_url string) (*Page, error) {
+func LOLPage(page_url string) (*TPage, error) {
 	doc, err := goquery.NewDocument(page_url)
 	if err != nil {
 		return nil, err
@@ -42,8 +41,8 @@ func LOLPage(page_url string) (*Page, error) {
 		return nil, common.NewSelfError("span find failure:" + page_url)
 	}
 
-	page := &Page{
-		Anthor: info_ele.Eq(1).Text(),
+	page := &TPage{
+		Author: info_ele.Eq(1).Text(),
 		Source: info_ele.Eq(5).Text(),
 		Date:   info_ele.Eq(6).Text(),
 	}
@@ -68,7 +67,7 @@ func LOLPage(page_url string) (*Page, error) {
 	return page, nil
 }
 
-func OWPage(page_url string) (*Page, error) {
+func OWPage(page_url string) (*TPage, error) {
 	return LOLPage(page_url)
 }
 
@@ -132,7 +131,7 @@ func comment_count(id string) (string, error) {
 	return string(m[1]), nil
 }
 
-func CSGOPage(page_url string) (*Page, error) {
+func CSGOPage(page_url string) (*TPage, error) {
 	doc, err := goquery.NewDocument(page_url)
 	if err != nil {
 		return nil, err
@@ -143,7 +142,7 @@ func CSGOPage(page_url string) (*Page, error) {
 		return nil, common.NewSelfError("span find failure:" + page_url)
 	}
 
-	page := &Page{
+	page := &TPage{
 		Source: info_ele.Eq(3).Text(),
 		Date:   info_ele.Eq(4).Text(),
 	}
@@ -168,7 +167,7 @@ func CSGOPage(page_url string) (*Page, error) {
 	return page, nil
 }
 
-func MEPage(page_url string) (*Page, error) {
+func MEPage(page_url string) (*TPage, error) {
 	doc, err := goquery.NewDocument(page_url)
 	if err != nil {
 		return nil, err
@@ -189,14 +188,9 @@ func MEPage(page_url string) (*Page, error) {
 		return nil, common.NewSelfError(info_ele.Eq(0).Text() + " SplitN failure")
 	}
 
-	page := &Page{
-		Source: strings.TrimSpace(
-			// "："是中文输入法输入的
-			source2list[1],
-		),
-		Date: strings.TrimSpace(
-			date2list[1],
-		),
+	page := &TPage{
+		Source: source2list[1],
+		Date:   date2list[1],
 	}
 
 	// 获取文章id
@@ -219,7 +213,7 @@ func MEPage(page_url string) (*Page, error) {
 	return page, nil
 }
 
-func DOTA2Page(page_url string) (*Page, error) {
+func DOTA2Page(page_url string) (*TPage, error) {
 	doc, err := goquery.NewDocument(page_url)
 	if err != nil {
 		return nil, err
@@ -232,23 +226,7 @@ func DOTA2Page(page_url string) (*Page, error) {
 		return nil, common.NewSelfError(info + " SplitN failure")
 	}
 
-	return &Page{
-		Date: strings.TrimSpace(date2list[1]),
+	return &TPage{
+		Date: date2list[1],
 	}, nil
-}
-
-func NewPage(page_url string) (*Page, error) {
-	var game_page = map[string]func(string) (*Page, error){
-		"http://lol.":   LOLPage,
-		"http://ow.":    OWPage,
-		"http://csgo.":  CSGOPage,
-		"http://me.":    MEPage,
-		"http://dota2.": DOTA2Page,
-	}
-	for prefix, handler := range game_page {
-		if strings.HasPrefix(page_url, prefix) {
-			return handler(page_url)
-		}
-	}
-	return nil, errors.New("can not support " + page_url)
 }

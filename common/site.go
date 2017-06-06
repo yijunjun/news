@@ -16,7 +16,6 @@
 package common
 
 import (
-	"errors"
 	"net/url"
 	"strings"
 )
@@ -26,6 +25,10 @@ type SiteHandle func(string, *url.URL) error
 var g_site_handles = map[string]SiteHandle{}
 
 func RegSiteHandle(site string, handle SiteHandle) {
+	if _, has := g_site_handles[site]; has {
+		panic(site + " has exist")
+	}
+
 	g_site_handles[site] = handle
 }
 
@@ -36,7 +39,7 @@ func FetchSite(page_url string) error {
 	}
 
 	for s, h := range g_site_handles {
-		if strings.Contains(u.Host, s) {
+		if strings.HasSuffix(u.Host, s) {
 			return h(page_url, u)
 		}
 	}

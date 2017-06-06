@@ -18,53 +18,52 @@ package com178
 import "testing"
 
 func TestLOLPage(t *testing.T) {
-	page, err := LOLPage("http://lol.15w.com/ss/5606964485.html")
+	page, err := LOLPage("http://lol.178.com/201705/289795432613.html")
 	if err != nil {
 		t.Error(err.Error())
 		return
 	}
 
-	t.Log(page.Id, page.Anthor, page.Source, page.Date, page.HitsCount, page.CommentCount)
+	t.Log(page.Id, page.Author, page.Source, page.Date, page.HitsCount, page.CommentCount)
 }
 
 func TestOWPage(t *testing.T) {
-	page, err := LOLPage("http://ow.15w.com/ss/5606966705.html")
+	page, err := OWPage("http://ow.178.com/201706/290311805555.html")
 	if err != nil {
 		t.Error(err.Error())
 		return
 	}
 
-	t.Log(page.Id, page.Anthor, page.Source, page.Date, page.HitsCount, page.CommentCount)
-}
-
-func TestCSGOPage(t *testing.T) {
-	page, err := CSGOPage("http://csgo.15w.com/yxzx/5606954825.html")
-	if err != nil {
-		t.Error(err.Error())
-		return
-	}
-
-	t.Log(page.Id, page.Anthor, page.Source, page.Date, page.HitsCount, page.CommentCount)
+	t.Log(page.Id, page.Author, page.Source, page.Date, page.HitsCount, page.CommentCount)
 }
 
 func TestMEPage(t *testing.T) {
-
-	page, err := MEPage("http://me.15w.com/dj/5605406665.html")
+	page, err := MEPage("http://shouyou.178.com/201611/32904103302.html")
 	if err != nil {
 		t.Error(err.Error())
 		return
 	}
 
-	t.Log(page.Id, page.Anthor, page.Source, page.Date, page.HitsCount, page.CommentCount)
+	t.Log(page.Id, page.Author, page.Source, page.Date, page.HitsCount, page.CommentCount)
 }
 
 func TestDOTA2Page(t *testing.T) {
 
-	page, err := DOTA2Page("http://dota2.15w.com/guofuxinwen/5606947805.html")
+	page, err := DOTA2Page("http://dota2.178.com/201705/289523076814.html")
 	if err != nil {
 		t.Error(err.Error())
 		return
 	}
 
-	t.Log(page.Id, page.Anthor, page.Source, page.Date, page.HitsCount, page.CommentCount)
+	t.Log(page.Id, page.Author, page.Source, page.Date, page.HitsCount, page.CommentCount)
+}
+
+func TestCSGOPage(t *testing.T) {
+	page, err := CSGOPage("http://csgo.178.com/201706/290714969209.html")
+	if err != nil {
+		t.Error(err.Error())
+		return
+	}
+
+	t.Log(page.Id, page.Author, page.Source, page.Date, page.HitsCount, page.CommentCount)
 }
