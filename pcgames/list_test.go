@@ -21,8 +21,8 @@ import (
 	. "github.com/yijunjun/news/model"
 )
 
-func run(t *testing.T, handler func(string) (*TList, error), url string) {
-	list, err := handler(url)
+func test_list(t *testing.T, handler func(string) (*TList, error), target string) {
+	list, err := handler(target)
 	if err != nil {
 		t.Error(err.Error())
 		return
@@ -38,13 +38,13 @@ func run(t *testing.T, handler func(string) (*TList, error), url string) {
 }
 
 func TestLOLList(t *testing.T) {
-	run(t, LOLList, "http://wangyou.pcgames.com.cn/zhuanti/lol/news/")
+	test_list(t, LOLList, "http://wangyou.pcgames.com.cn/zhuanti/lol/news/")
 }
 
 func TestDOTA2List(t *testing.T) {
-	run(t, DOTA2List, "http://fight.pcgames.com.cn/dota2/news/")
+	test_list(t, DOTA2List, "http://fight.pcgames.com.cn/dota2/news/")
 }
 
 func TestCSGOList(t *testing.T) {
-	run(t, CSGOList, "http://fight.pcgames.com.cn/cs/news/")
+	test_list(t, CSGOList, "http://fight.pcgames.com.cn/cs/news/")
 }

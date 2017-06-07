@@ -43,7 +43,7 @@ func init() {
 			"ow": TSiteNode{
 				ListPrefix: "/xw/",
 				ListFun:    OWList,
-				PagePrefix: "/ss/",
+				PagePrefix: "/news/",
 				PageFun:    OWPage,
 			},
 			"me": TSiteNode{

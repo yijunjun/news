@@ -17,12 +17,13 @@ package com15w
 
 import (
 	"github.com/PuerkitoBio/goquery"
+	"github.com/yijunjun/news/common"
 	. "github.com/yijunjun/news/model"
 )
 
 func LOLList(list_url string) (*TList, error) {
 	// 列表页
-	doc, err := goquery.NewDocument(list_url)
+	doc, err := common.Download(list_url)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +67,7 @@ func OWList(list_url string) (*TList, error) {
 
 func MEList(list_url string) (*TList, error) {
 	// 列表页
-	doc, err := goquery.NewDocument(list_url)
+	doc, err := common.Download(list_url)
 	if err != nil {
 		return nil, err
 	}
@@ -106,7 +107,7 @@ func MEList(list_url string) (*TList, error) {
 
 func DOTA2List(list_url string) (*TList, error) {
 	// 列表页
-	doc, err := goquery.NewDocument(list_url)
+	doc, err := common.Download(list_url)
 	if err != nil {
 		return nil, err
 	}
@@ -139,7 +140,7 @@ func DOTA2List(list_url string) (*TList, error) {
 
 func CSGOList(list_url string) (*TList, error) {
 	// 列表页
-	doc, err := goquery.NewDocument(list_url)
+	doc, err := common.Download(list_url)
 	if err != nil {
 		return nil, err
 	}

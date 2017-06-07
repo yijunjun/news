@@ -21,8 +21,8 @@ import (
 	. "github.com/yijunjun/news/model"
 )
 
-func run(t *testing.T, handler func(string) (*TList, error), url string) {
-	list, err := handler(url)
+func test_list(t *testing.T, handler func(string) (*TList, error), target string) {
+	list, err := handler(target)
 	if err != nil {
 		t.Error(err.Error())
 		return
@@ -38,21 +38,21 @@ func run(t *testing.T, handler func(string) (*TList, error), url string) {
 }
 
 func TestLOLList(t *testing.T) {
-	run(t, LOLList, "http://lol.duowan.com/tag/307577396279.html")
+	test_list(t, LOLList, "http://lol.duowan.com/tag/307577396279.html")
 }
 
 func TestOWList(t *testing.T) {
-	run(t, OWList, "http://ow.duowan.com/tag/309977280409.html")
+	test_list(t, OWList, "http://ow.duowan.com/tag/309977280409.html")
 }
 
 func TestMEList(t *testing.T) {
-	run(t, MEList, "http://wzry.duowan.com/tag/327319645493.html")
+	test_list(t, MEList, "http://wzry.duowan.com/tag/327319645493.html")
 }
 
 func TestDOTA2List(t *testing.T) {
-	run(t, DOTA2List, "http://dota2.duowan.com/1302/m_225195792481.html")
+	test_list(t, DOTA2List, "http://dota2.duowan.com/1302/m_225195792481.html")
 }
 
 func TestCSGOList(t *testing.T) {
-	run(t, CSGOList, "http://csgo.duowan.com/tag/319717425248.html")
+	test_list(t, CSGOList, "http://csgo.duowan.com/tag/319717425248.html")
 }

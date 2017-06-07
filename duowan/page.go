@@ -25,10 +25,93 @@ import (
 	"strings"
 	"time"
 
-	"github.com/PuerkitoBio/goquery"
 	"github.com/yijunjun/news/common"
 	. "github.com/yijunjun/news/model"
 )
+
+func LOLPage(page_url string) (*TPage, error) {
+	doc, err := common.Download(page_url)
+	if err != nil {
+		return nil, err
+	}
+
+	info_ele := doc.Find("address").ChildrenFiltered("span")
+	if info_ele == nil {
+		return nil, common.NewSelfError("span find failure:" + page_url)
+	}
+
+	source2list := strings.SplitN(
+		info_ele.Eq(2).Text(),
+		"：",
+		2,
+	)
+	if len(source2list) != 2 {
+		return nil, common.NewSelfError("source splitN failure:" + info_ele.Eq(2).Text())
+	}
+
+	author2list := strings.SplitN(
+		info_ele.Eq(3).Text(),
+		"：",
+		2,
+	)
+	if len(author2list) != 2 {
+		return nil, common.NewSelfError("author splitN failure:" + info_ele.Eq(3).Text())
+	}
+
+	return &TPage{
+		Author: author2list[1],
+		Source: source2list[1],
+		Date:   info_ele.Eq(0).Text(),
+	}, nil
+}
+
+func OWPage(page_url string) (*TPage, error) {
+	return LOLPage(page_url)
+}
+
+func MEPage(page_url string) (*TPage, error) {
+	doc, err := common.Download(page_url)
+	if err != nil {
+		return nil, err
+	}
+
+	info_ele := doc.Find("address").ChildrenFiltered("span")
+	if info_ele == nil {
+		return nil, common.NewSelfError("span find failure:" + page_url)
+	}
+
+	source2list := strings.SplitN(
+		info_ele.Eq(1).Text(),
+		"：",
+		2,
+	)
+	if len(source2list) != 2 {
+		return nil, common.NewSelfError("source splitN failure:" + info_ele.Eq(1).Text())
+	}
+
+	author2list := strings.SplitN(
+		info_ele.Eq(2).Text(),
+		"：",
+		2,
+	)
+	if len(author2list) != 2 {
+		return nil, common.NewSelfError("author splitN failure:" + info_ele.Eq(2).Text())
+	}
+
+	return &TPage{
+		Author: author2list[1],
+		Source: source2list[1],
+		Date:   info_ele.Eq(0).Text(),
+	}, nil
+}
+
+func DOTA2Page(page_url string) (*TPage, error) {
+	return LOLPage(page_url)
+}
+
+func CSGOPage(page_url string) (*TPage, error) {
+	return LOLPage(page_url)
+}
 
 // 构造请求获取阅读次数
 func hits_count(id string) (string, error) {
@@ -94,88 +177,4 @@ func comment_count(id string) (string, error) {
 	}
 
 	return string(m[1]), nil
-}
-
-func LOLPage(page_url string) (*TPage, error) {
-	doc, err := goquery.NewDocument(page_url)
-	if err != nil {
-		return nil, err
-	}
-
-	info_ele := doc.Find("address").ChildrenFiltered("span")
-	if info_ele == nil {
-		return nil, common.NewSelfError("span find failure:" + page_url)
-	}
-
-	source2list := strings.SplitN(
-		info_ele.Eq(2).Text(),
-		"：",
-		2,
-	)
-	if len(source2list) != 2 {
-		return nil, common.NewSelfError("source splitN failure:" + info_ele.Eq(2).Text())
-	}
-
-	author2list := strings.SplitN(
-		info_ele.Eq(3).Text(),
-		"：",
-		2,
-	)
-	if len(author2list) != 2 {
-		return nil, common.NewSelfError("author splitN failure:" + info_ele.Eq(3).Text())
-	}
-
-	return &TPage{
-		Author: author2list[1],
-		Source: source2list[1],
-		Date:   info_ele.Eq(0).Text(),
-	}, nil
-}
-
-func OWPage(page_url string) (*TPage, error) {
-	return LOLPage(page_url)
-}
-
-func MEPage(page_url string) (*TPage, error) {
-	doc, err := goquery.NewDocument(page_url)
-	if err != nil {
-		return nil, err
-	}
-
-	info_ele := doc.Find("address").ChildrenFiltered("span")
-	if info_ele == nil {
-		return nil, common.NewSelfError("span find failure:" + page_url)
-	}
-
-	source2list := strings.SplitN(
-		info_ele.Eq(1).Text(),
-		"：",
-		2,
-	)
-	if len(source2list) != 2 {
-		return nil, common.NewSelfError("source splitN failure:" + info_ele.Eq(1).Text())
-	}
-
-	author2list := strings.SplitN(
-		info_ele.Eq(2).Text(),
-		"：",
-		2,
-	)
-	if len(author2list) != 2 {
-		return nil, common.NewSelfError("author splitN failure:" + info_ele.Eq(2).Text())
-	}
-
-	return &TPage{
-		Author: author2list[1],
-		Source: source2list[1],
-		Date:   info_ele.Eq(0).Text(),
-	}, nil
-}
-
-func DOTA2Page(page_url string) (*TPage, error) {
-	return LOLPage(page_url)
-}
-
-func CSGOPage(page_url string) (*TPage, error) {
-	return LOLPage(page_url)
 }

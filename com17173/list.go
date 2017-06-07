@@ -19,16 +19,13 @@ import (
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
+	"github.com/yijunjun/news/common"
 	. "github.com/yijunjun/news/model"
-
-	"net/http"
-
-	"github.com/axgle/mahonia"
 )
 
 func LOLList(list_url string) (*TList, error) {
 	// 列表页
-	doc, err := goquery.NewDocument(list_url)
+	doc, err := common.Download(list_url)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +58,7 @@ func LOLList(list_url string) (*TList, error) {
 
 func OWList(list_url string) (*TList, error) {
 	// 列表页
-	doc, err := goquery.NewDocument(list_url)
+	doc, err := common.Download(list_url)
 	if err != nil {
 		return nil, err
 	}
@@ -100,7 +97,7 @@ func OWList(list_url string) (*TList, error) {
 
 func MEList(list_url string) (*TList, error) {
 	// 列表页
-	doc, err := goquery.NewDocument(list_url)
+	doc, err := common.Download(list_url)
 	if err != nil {
 		return nil, err
 	}
@@ -143,17 +140,8 @@ func MEList(list_url string) (*TList, error) {
 }
 
 func DOTA2List(list_url string) (*TList, error) {
-	// 因为服务器返回gb2312编码,但goquery默认采用utf8,所以采用mahonia转换
-	resp, err := http.Get(list_url)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	gbk := mahonia.NewDecoder("gbk")
-
 	// 列表页
-	doc, err := goquery.NewDocumentFromReader(gbk.NewReader(resp.Body))
+	doc, err := common.Download(list_url, "gbk")
 	if err != nil {
 		return nil, err
 	}
@@ -186,7 +174,7 @@ func DOTA2List(list_url string) (*TList, error) {
 
 func CSGOList(list_url string) (*TList, error) {
 	// 列表页
-	doc, err := goquery.NewDocument(list_url)
+	doc, err := common.Download(list_url)
 	if err != nil {
 		return nil, err
 	}

@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	_ "github.com/yijunjun/news/com15w"
-	// _ "github.com/yijunjun/news/com17173"
+	_ "github.com/yijunjun/news/com17173"
 	_ "github.com/yijunjun/news/com178"
 	_ "github.com/yijunjun/news/duowan"
 )

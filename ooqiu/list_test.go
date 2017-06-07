@@ -21,8 +21,8 @@ import (
 	. "github.com/yijunjun/news/model"
 )
 
-func run(t *testing.T, handler func(string) (*TList, error), url string) {
-	list, err := handler(url)
+func test_list(t *testing.T, handler func(string) (*TList, error), target string) {
+	list, err := handler(target)
 	if err != nil {
 		t.Error(err.Error())
 		return
@@ -38,24 +38,24 @@ func run(t *testing.T, handler func(string) (*TList, error), url string) {
 }
 
 func TestLOLList(t *testing.T) {
-	run(t, LOLList, "http://www.ooqiu.com/lol/news/")
-	run(t, LOLList, "http://www.ooqiu.com/lol/news/bg/")
+	test_list(t, LOLList, "http://www.ooqiu.com/lol/news/")
+	test_list(t, LOLList, "http://www.ooqiu.com/lol/news/bg/")
 }
 
 func TestOWList(t *testing.T) {
-	run(t, OWList, "http://ow.ooqiu.com/news/")
+	test_list(t, OWList, "http://ow.ooqiu.com/news/")
 }
 
 func TestMEList(t *testing.T) {
-	run(t, MEList, "http://sy.ooqiu.com/wzry/rdnr/")
+	test_list(t, MEList, "http://sy.ooqiu.com/wzry/rdnr/")
 }
 
 func TestDOTA2List(t *testing.T) {
-	run(t, DOTA2List, "http://www.ooqiu.com/dota2/news/")
-	run(t, DOTA2List, "http://www.ooqiu.com/dota2/news/saishi/")
+	test_list(t, DOTA2List, "http://www.ooqiu.com/dota2/news/")
+	test_list(t, DOTA2List, "http://www.ooqiu.com/dota2/news/saishi/")
 }
 
 func TestCSGOList(t *testing.T) {
-	run(t, CSGOList, "http://www.ooqiu.com/csgo/news/")
-	run(t, CSGOList, "http://www.ooqiu.com/csgo/news/saishi/")
+	test_list(t, CSGOList, "http://www.ooqiu.com/csgo/news/")
+	test_list(t, CSGOList, "http://www.ooqiu.com/csgo/news/saishi/")
 }
